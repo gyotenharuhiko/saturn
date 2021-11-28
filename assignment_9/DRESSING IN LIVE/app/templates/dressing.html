@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        <title>DRESSING IN LIVE</title>
+        <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='assets/favicon.ico') }}" />
+        <!-- Font Awesome icons (free version)-->
+        <script src="https://use.fontawesome.com/releases/v5.15.3/js/all.js" crossorigin="anonymous"></script>
+        <!-- Google fonts-->
+        <link href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" rel="stylesheet" type="text/css"/>
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css" />
+        <!-- Core theme CSS (includes Bootstrap)-->
+        <link rel="stylesheet" href="{{url_for('static', filename='css/style.css')}}">  
+    </head>
+    <body>
+        <!-- Navigation-->
+        <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
+            <div class="container">
+                <a class="navbar-brand" href="/">Just Dress It!</a>
+                <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+                    Menu
+                    <i class="fas fa-bars"></i>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarResponsive">
+                    <ul class="navbar-nav ml-auto">
+                        <li class="nav-item"><a class="nav-link" href="/">首页</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/festivals">演出信息</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/dressing">穿搭参考</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/contact">联系我们</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{url_for('login')}}">登录</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{url_for('register')}}">注册</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <!-- Page Header-->
+        <header class="masthead" style="background-image: url({{ url_for('static', filename='assets/img/dressing_bg.png') }})">
+            <div class="overlay"></div>
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-8 col-md-10 mx-auto">
+                        <div class="site-heading">
+                            <h1>凭穿搭找寻同类</h1>
+                            <span class="subheading">Looking for someone who shares my dressing/music tastes.</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <!-- Main Content-->
+        <div class="container">
+            <h2 class="preface-title">我想穿成...</h2>
+                <br>
+            <div class="musician_itemlist">
+                <div class=“item_box”>
+                    <div class="items">
+                        <div class="items_image">
+                            <img src="{{ url_for('static', filename='assets/img/artists/mozaiyang.JPG') }}">
+                        </div>
+                        <div class="items_txt">
+                            <div class="items_txt_name" id="mozaiyang">莫宰羊</div>
+                            <script>
+                                document.querySelector("#mozaiyang").addEventListener('click', OpenMZY);
+                                function OpenMZY(){
+                                    window.open("dressing/mozaiyang");
+                                };
+                            </script>                                                       
+                            <div class="items_txt_music_genre">音乐流派：#Pop Rap #Trap Rap</div>
+                            <div class="items_txt_music_kw">音乐关键词：#古怪 #童真 #浪漫</div>
+                            <div class="items_txt_dressing_kw">穿搭关键词：#细框眼镜 #都市机能 #花衬衫</div>
+                        </div>
+                    </div>
+                    <div class="items">
+                        <div class="items_image">
+                            <img src="{{ url_for('static', filename='assets/img/artists/gangxin.JPG') }}">
+                        </div>
+                        <div class="items_txt">
+                            <div class="items_txt_name">
+                                <a href="" target="_blank">钢心</a>
+                            </div>
+                            <div class="items_txt_music_genre">音乐流派：#Punk #New Wave #Garage Rock</div>
+                            <div class="items_txt_music_kw">音乐关键词：#迷醉 #洒脱</div>
+                            <div class="items_txt_dressing_kw">穿搭关键词：#Vivienne Westwood #Dr.Martens</div>
+                        </div>
+                    </div>
+                    <div class="items">
+                        <div class="items_image">
+                            <img src="{{ url_for('static', filename='assets/img/artists/baizhishan.JPG') }}">
+                        </div>
+                        <div class="items_txt">
+                            <div class="items_txt_name">
+                                <a href="" target="_blank">白纸扇</a>
+                            </div>
+                            <div class="items_txt_music_genre">音乐流派：#Pop Rap #Trap Rap</div>
+                            <div class="items_txt_music_kw">音乐关键词：#古怪 #童真 #浪漫</div>
+                            <div class="items_txt_dressing_kw">穿搭关键词：#细框眼镜 #都市机能 #花衬衫</div>
+                        </div>
+                    </div>
+                    <div class="items">
+                        <div class="items_image">
+                            <img src="{{ url_for('static', filename='assets/img/artists/kangmushi.JPG') }}">
+                        </div>
+                        <div class="items_txt">
+                            <div class="items_txt_name">
+                                <a href="" target="_blank">康姆士</a>
+                            </div>
+                            <div class="items_txt_music_genre">音乐流派：#Pop Rap #Trap Rap</div>
+                            <div class="items_txt_music_kw">音乐关键词：#古怪 #童真 #浪漫</div>
+                            <div class="items_txt_dressing_kw">穿搭关键词：#细框眼镜 #都市机能 #花衬衫</div>
+                        </div>
+                    </div>
+                    <div class="items">
+                        <div class="items_image">
+                            <img src="{{ url_for('static', filename='assets/img/artists/nihonghuayuan.JPG') }}">
+                        </div>
+                        <div class="items_txt">
+                            <div class="items_txt_name">
+                                <a href="" target="_blank">霓虹花园</a>
+                            </div>
+                            <div class="items_txt_music_genre">音乐流派：#Pop Rap #Trap Rap</div>
+                            <div class="items_txt_music_kw">音乐关键词：#古怪 #童真 #浪漫</div>
+                            <div class="items_txt_dressing_kw">穿搭关键词：#细框眼镜 #都市机能 #花衬衫</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Footer-->
+            <footer>
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-8 col-md-10 mx-auto">
+                            <p class="copyright text-muted">Created by SUN Yutong, 2021</p>
+                        </div>
+                    </div>
+                </div>
+            </footer>
+        <!-- Bootstrap core JS-->
+        <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"></script>
+        <!-- Core theme JS-->
+        <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
+    </body>
+</html>
+
+<style>
+    .items{
+        margin:20px auto;
+        border: solid 1px lightgray;
+        overflow: hidden;
+    }
+    .items_image{
+        width:200px;
+        float: left;
+    }
+    .items img{
+        display:block;
+        width:200px;
+        height:200px;
+    }
+    .items_txt{
+        font-size: 18px;
+        width: 850px;
+        float: right;
+        line-height: 50px;
+    }
+    .items_txt_name{
+        font-weight: bolder;
+        font-size: 20px;
+    }
+    .items_txt_music_genre, .items_txt_music_kw, .items_txt_dressing_kw{
+        color: gray;
+    }
+
+
+</style>
