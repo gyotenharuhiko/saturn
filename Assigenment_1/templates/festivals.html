@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>Music Festivals</title>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="description" content="Mixtape template project">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="static/styles/bootstrap-4.1.2/bootstrap.min.css">
+<link href="static/plugins/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+<link rel="stylesheet" type="text/css" href="static/plugins/OwlCarousel2-2.2.1/owl.carousel.css">
+<link rel="stylesheet" type="text/css" href="static/plugins/OwlCarousel2-2.2.1/owl.theme.default.css">
+<link rel="stylesheet" type="text/css" href="static/plugins/OwlCarousel2-2.2.1/animate.css">
+<link rel="stylesheet" type="text/css" href="static/styles/contact.css">
+<link rel="stylesheet" type="text/css" href="static/styles/contact_responsive.css">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A==" crossorigin="" />
+<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA==" crossorigin=""></script>
+<script src="https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v0.4.0/leaflet.markercluster.js"></script>
+
+<style>
+	.form-group {
+    padding-left: 20px;
+    padding-top: 160px;
+	}
+
+	#filter.form-control.form-control-sm{
+			height: 43px;
+			font-size: 14px;
+			text-align: left;
+			padding: 5px 10px;
+			line-height: 1.5;
+			border-color:#343a40
+	}
+
+	.btn{
+			font-size:14px;
+			padding: 5px 10px;
+	}
+
+	.btn-dark {
+    color: #fff;
+    background-color: #de4f32;
+    border-color: #de4f32;
+
+	}
+		
+	.btn-outline-primary {
+			border-color: lightgray;
+	}
+
+	.leaflet-popup-content {
+			margin: 13px 19px;
+			line-height: 1.4;
+			text-align: center;
+	}
+
+	img {
+			text-align: center; 
+			height: 100%;
+			width: 100%;
+	}
+
+</style>
+<style>
+	dl,
+	dd {
+			margin: 0;
+	}
+
+	#box {
+			width: 100%;
+			background:black;
+			margin: 15px auto;
+			border:1px solid lightgray;
+	}
+
+	#box dl {
+			height: 50px;
+			line-height: 50px;
+			border-bottom: 1px dashed #dadada;
+			margin: 0 12px;
+	}
+
+	#box dt {
+			float: left;
+			color:#de4f32;
+			font-weight: bold;
+			font-size:15px;
+	}
+
+	#box dd {
+			float: left;
+			color: white;
+			margin: 0 20px;
+			font-size: 14px;
+			cursor: pointer;
+	}
+
+	#box dd.active {
+			color: #de4f32;
+			font-weight: bold;
+	}
+
+	#box dl.select {
+			background:black;
+			margin: 0;
+			padding: 0 11px;
+	}
+
+	#box dl.select dd{
+			border: 1px solid #de4f32;
+			height: 25px;
+			line-height: 25px;
+			margin-top: 13px;
+			padding: 0 2px 0 10px;
+			border-radius: 3px;background-color: black;
+	}
+	#box dl.select dd span{
+			width: 20px;
+			height: 20px;
+			display: inline-block;
+			text-align: center;
+			line-height: 20px;
+			background: #de4f32;
+			color: #fff;
+			margin-left: 10px;
+			cursor: pointer;border-radius: 5px;
+	}
+</style>
+<style>
+	a{
+		color:#de4f32;
+	}
+	p a {
+		text-decoration:none;
+	}
+	.items{
+			margin:20px auto;
+			border: solid 1px #de4f32;
+			overflow: hidden;
+	}
+	.items_image{
+			width:200px;
+			float: left;
+	}
+	.items img{
+			display:block;
+			width:200px;
+			height:267px;
+			padding:15px
+	}
+	.items_txt{
+			font-size: 14px;
+			width: 100%;
+			line-height: 30px;
+			color:white;
+			margin-top: 15px;
+			padding-right: 10px;
+	}
+	.items_txt_name{
+			font-weight: bolder;
+			font-size: 20px;
+			color:white ;
+	}
+
+	.items_txt_price{
+	color:#e72f2f;
+	}
+
+
+	
+</style>
+
+
+</head>
+<body>
+
+<div class="super_container">
+	
+	<!-- Header -->
+	<header class="header">
+		<div class="header_content d-flex flex-row align-items-center justify-content-center">
+			<div class="logo"><a href="#">Just Wear It!</a></div>
+			<div class="log_reg">
+				<ul class="d-flex flex-row align-items-start justify-content-start">
+					{% if current_user.is_authenticated %}
+					<li><a href="/profile">我的</a></li>
+					<li><a href="{{url_for('logout')}}">登出</a></li>
+					{% else %}
+					<li><a href="/login">登录</a></li>
+					<li><a href="/register">注册</a></li>
+					{% endif %}
+				</ul>
+			</div>
+			<nav class="main_nav">
+				<ul class="d-flex flex-row align-items-start justify-content-start">
+					<li><a href="/">首页</a></li>
+					<li class="active"><a href="/festivals">演出信息</a></li>
+					<li><a href="/dressing">穿搭参考</a></li>
+					<li><a href="/contact">联系我们</a></li>
+				</ul>
+			</nav>
+			<div class="hamburger ml-auto">
+				<div class="d-flex flex-column align-items-end justify-content-between">
+					<div></div>
+					<div></div>
+					<div></div>
+				</div>
+			</div>
+		</div>
+	</header>
+
+	<!-- Menu -->
+
+	<div class="menu">
+		<div>
+			<div class="menu_overlay"></div>
+			<div class="menu_container d-flex flex-column align-items-start justify-content-center">
+				<div class="menu_log_reg">
+					<ul class="d-flex flex-row align-items-start justify-content-start">
+						{% if current_user.is_authenticated %}
+						<li><a href="/profile">我的</a></li>
+						<li><a href="{{url_for('logout')}}">登出</a></li>
+						{% else %}
+						<li><a href="/login">登录</a></li>
+						<li><a href="/register">注册</a></li>
+						{% endif %}
+					</ul>
+				</div>
+				<nav class="menu_nav">
+					<ul class="d-flex flex-column align-items-start justify-content-start">
+						<li><a href="/">首页</a></li>
+						<li><a href="/festivals">演出信息</a></li>
+						<li><a href="/dressing">穿搭参考</a></li>
+						<li><a href="/contact">联系我们</a></li>						
+					</ul>
+				</nav>
+			</div>
+		</div>
+	</div>
+
+
+	<!-- Home -->
+
+	<div class="home">
+		<div class="home_inner">
+			<!-- Image artist: https://unsplash.com/@yoannboyer -->
+			<div class="parallax_background parallax-window" data-parallax="scroll" data-image-src="static/assets/img/festival_bg.jpg" data-speed="0.8"></div>
+			<div class="home_container">
+				<div class="home_content text-center">
+					<div class="home_subtitle">Upcoming Festivals</div>
+					<div class="home_title">开启音乐节现场</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Contact -->
+
+	<div class="contact">
+		<div class="container">
+			<div class="row">
+				<div id="map" style="width: 50%; height: 400px"></div>
+				<form>
+					<div class="form-group">
+							<select id="filter" class="form-control form-control-sm" style="width:auto; display:inline;" onchange="place_marker();">
+									<option value="" selected disabled>请选择你想去的音乐节</option>
+									{% for row in entries %}
+									<option value="{{ loop.index }}">{{ row["Name"] }}</option>
+									{% endfor %}  
+							</select>
+							<script type="text/javascript">
+									place_marker = function(place) {
+											let filter = document.getElementById("filter");
+											place = filter.selectedIndex-1;
+											var latlng = L.latLng({ lat: data[place].Lat, lng: data[place].Lng });
+											L.marker( latlng )
+											.bindPopup( '<a href="' + data[place].url + '" target="_blank">' + '<img src="' + data[place].img_url+'" width = "80px"><br>'+data[place].name + '</a>' )
+											.addTo(layerGroup);
+									} 
+									var marker = L.marker([-41.29042, 174.78219])
+											.addTo(map);
+							</script>  
+							<button type="button" class="btn btn-dark btn-sm" id='roll_up' onclick="show_districts();">一键查看所有音乐节现场</button>
+							<script type="text/javascript">
+									show_districts = function(){
+											for (var i in data) {
+													var latlng = L.latLng({ lat: data[i].Lat, lng: data[i].Lng });
+													L.marker( latlng )
+													.bindPopup( '<a href="' + data[i].url + '" target="_blank">' + '<img src="' + data[i].img_url+'" width = "80px"><br>'+data[i].name + '</a>' )
+													.addTo(layerGroup);
+											}
+									}
+							</script>
+							<button type="button" class="btn btn-dark btn-sm" id="roll_up" onclick="clear_map();">重设</button>
+							<script type="text/javascript">
+									clear_map = function() {
+											$('#map').show();
+											layerGroup.clearLayers();
+									}
+							</script>
+					</div><!-- form-group-->           
+				</form>  
+        <div id="box">
+            <dl>
+                <dt>演出城市：</dt>
+                <dd>全部</dd>
+                <dd>上海</dd>
+                <dd>广州</dd>
+                <dd>南京</dd>
+                <dd>成都</dd>
+                <dd>日照</dd>
+                <dd>舟山</dd>
+            </dl>
+            <dl>
+                <dt>演出时间：</dt>
+                <dd>全部</dd>
+                <dd>今天</dd>
+                <dd>最近一周内</dd>
+                <dd>下周内</dd>
+                <dd>最近一个月</dd>
+            </dl>
+            <dl class="select" style="border-bottom-width: 0px;">
+                <dt>已选条件：</dt>
+            </dl>
+        </div>	
+				<form class="form-inline my-2 my-lg-0">
+					<input class="form-control mr-sm-2" type="text" placeholder="搜索音乐节" aria-label="Search">
+					<button class="btn btn-dark btn-sm" type="submit">搜索</button>
+				</form>			
+				<div class="festivals_itemlist">
+					<div class=“item_box”>
+							<div class="items">
+									<div class="items_image">
+											<img src="{{ url_for('static', filename='assets/img/festivals/festival1.png')}}">
+									</div>
+									<div class="items_txt">
+											<div class="items_txt_name">
+													<span>【舟山】</span>
+													<a href="/1" target="_blank">2021舟山东海音乐节（11月27日）</a>
+													</div> 
+											<div class="items_txt_artists">艺人：新裤子/Twinkle Star闪星/不复之血/RETURN THE TRUTH/Steely Heart钢心乐队/瑞王坟/皇后皮箱/Sky King Jack乐队/郭采洁/白纸扇/莫宰羊/AgainstAll对尖/PRP声音系统</div>
+											<div class="items_txt_location">地点：[舟山]舟山群岛新区 • 朱家尖南沙</div>
+											<div class="items_txt_date">时间：2021/11/27 14:00</div>
+											<div class="items_txt_price">¥280-399</div>
+											<p class="items_txt_ticket">前往购票：
+													<a class="ticketurl" href="https://detail.damai.cn/item.htm?id=658257440543&clicktitle=2021%E8%88%9F%E5%B1%B1%E4%B8%9C%E6%B5%B7%E9%9F%B3%E4%B9%90%E8%8A%82" target="_blank">大麦</a>
+													<a class="ticketurl" href="https://www.showstart.com/event/166270" target="_blank">秀动</a>
+											</p>
+									</div>   
+							</div>
+							<div class="items">
+								<div class="items_image">
+										<img src="{{ url_for('static', filename='assets/img/festivals/festival1.png')}}">
+								</div>
+								<div class="items_txt">
+										<div class="items_txt_name">
+												<span>【舟山】</span>
+												<a href="/2" target="_blank">2021舟山东海音乐节（11月28日）</a>
+												</div> 
+										<div class="items_txt_artists">艺人：万能青年旅店/五条人/Casino Demon赌鬼乐队/板砖乐队/马赛克乐队/达闻西乐队/梅卡德尔乐队/布鹅岛/远东之狮/灰汁团/续弦/CSBQ乐队/古龙十代/亚细亚报童</div>
+										<div class="items_txt_location">地点：[舟山]舟山群岛新区 • 朱家尖南沙</div>
+										<div class="items_txt_date">时间：2021/11/28 14:00</div>
+										<div class="items_txt_price">¥280-399</div>
+										<p class="items_txt_ticket">前往购票：
+												<a class="ticketurl" href="https://detail.damai.cn/item.htm?id=658257440543&clicktitle=2021%E8%88%9F%E5%B1%B1%E4%B8%9C%E6%B5%B7%E9%9F%B3%E4%B9%90%E8%8A%82" target="_blank">大麦</a>
+												<a class="ticketurl" href="https://www.showstart.com/event/166271" target="_blank">秀动</a>
+										</p>
+								</div>   
+							</div>
+
+							<div class="items">
+									<div class="items_image">
+											<img src="{{ url_for('static', filename='assets/img/festivals/festival3.png')}}">
+									</div>
+									<div class="items_txt">
+											<div class="items_txt_name">
+													<span>【南京】</span>
+													<a href="#" target="_blank">2021南京森林音乐节江北音乐季（12月4日）</a>
+													</div> 
+											<div class="items_txt_artists">艺人：痛仰/满舒克（YoungJack）/黑豹乐队/康姆士/许嵩/NINEONE#（乃万）/傻子与白痴/Mister Lady/黄誉博/BONE/电气樱桃/儿几</div>
+											<div class="items_txt_location">地点：[南京]南京江北新区扬子江公园</div>
+											<div class="items_txt_date">时间：2021/12/04 13:00</div>
+											<div class="items_txt_price">¥268-1288</div>
+											<p class="items_txt_ticket">前往购票：
+													<a class="ticketurl" href="https://detail.damai.cn/item.htm?id=656318058871&clicktitle=%E6%B1%9F%E5%8C%97%E6%96%B0%E5%8C%BA%E4%B8%AD%E5%A4%AE%E5%95%86%E5%8A%A1%E5%8C%BA%C2%B72021%E5%8D%97%E4%BA%AC%E6%A3%AE%E6%9E%97%E9%9F%B3%E4%B9%90%E8%8A%82%E6%B1%9F%E5%8C%97%E9%9F%B3%E4%B9%90%E5%AD%A3" target="_blank">大麦</a>
+													<a class="ticketurl" href="https://www.showstart.com/event/157675" target="_blank">秀动</a>
+											</p>
+									</div>   
+							</div>
+
+							<div class="items">
+								<div class="items_image">
+										<img src="{{ url_for('static', filename='assets/img/festivals/festival3.png')}}">
+								</div>
+								<div class="items_txt">
+										<div class="items_txt_name">
+												<span>【南京】</span>
+												<a href="#" target="_blank">2021南京森林音乐节江北音乐季（12月5日）</a>
+												</div> 
+										<div class="items_txt_artists">艺人：马思唯/气运联盟/直火帮SFG/泥鳅Zinco/星球撞树/海底时光机/李保森/郭顶/二手玫瑰/木马乐队/柳爽/扭曲机器/帆布小镇/冷水乐队</div>
+										<div class="items_txt_location">地点：[南京]南京江北新区扬子江公园</div>
+										<div class="items_txt_date">时间：2021/12/05 13:00</div>
+										<div class="items_txt_price">¥268-1288</div>
+										<p class="items_txt_ticket">前往购票：
+												<a class="ticketurl" href="https://detail.damai.cn/item.htm?id=656318058871&clicktitle=%E6%B1%9F%E5%8C%97%E6%96%B0%E5%8C%BA%E4%B8%AD%E5%A4%AE%E5%95%86%E5%8A%A1%E5%8C%BA%C2%B72021%E5%8D%97%E4%BA%AC%E6%A3%AE%E6%9E%97%E9%9F%B3%E4%B9%90%E8%8A%82%E6%B1%9F%E5%8C%97%E9%9F%B3%E4%B9%90%E5%AD%A3" target="_blank">大麦</a>
+												<a class="ticketurl" href="https://www.showstart.com/event/162928" target="_blank">秀动</a>
+										</p>
+								</div>   
+							</div>
+
+							<div class="items">
+								<div class="items_image">
+										<img src="{{ url_for('static', filename='assets/img/festivals/festival5.png')}}">
+								</div>
+								<div class="items_txt">
+										<div class="items_txt_name">
+												<span>【广州】</span>
+												<a href="#" target="_blank">2021国潮音乐嘉年华·广州站</a>
+												</div> 
+										<div class="items_txt_artists">艺人：马思唯/GAI周延/廖效浓/沙皮SharPei/街道办GDC/ODD陈思键/高天佐Trouble.Z/李佳隆Jello Rio/孟子坤/刘聪KEY.L/小精灵/TSong梁老师/小鬼（王琳凯 ）/陈泽希/曾涵江/王子异/KT杨君涛/Kc左元杰/沙一汀/符雅凝/卢俊杰/X玖少年团赵磊/姚琛/赵让/INT01-刘彰/李汶翰</div>
+										<div class="items_txt_location">地点：[广州]广州融创文旅城</div>
+										<div class="items_txt_date">时间：2021/12/04 14:00</div>
+										<div class="items_txt_price">¥558-888</div>
+										<p class="items_txt_ticket">前往购票：
+												<a class="ticketurl" href="https://detail.damai.cn/item.htm?id=660522717785&clicktitle=2021%E5%9B%BD%E6%BD%AE%E9%9F%B3%E4%B9%90%E5%98%89%E5%B9%B4%E5%8D%8E-%E5%B9%BF%E5%B7%9E%E7%AB%99" target="_blank">大麦</a>
+												<a class="ticketurl" href="https://www.showstart.com/event/167434" target="_blank">秀动</a>
+										</p>
+								</div>   
+							</div>
+
+							<div class="items">
+								<div class="items_image">
+										<img src="{{ url_for('static', filename='assets/img/festivals/festival6.png')}}">
+								</div>
+								<div class="items_txt">
+										<div class="items_txt_name">
+												<span>【广州】</span>
+												<a href="#" target="_blank">2021广州草莓音乐节(12月4日)</a>
+												</div> 
+										<div class="items_txt_artists">艺人：朴树/逃跑计划/Tizzy T/马赛克/与非门/焦迈奇/Hyper Slash/右侧合流/鲸浪</div>
+										<div class="items_txt_location">地点：[广州]广州长隆度假区音乐节广场</div>
+										<div class="items_txt_date">时间：2021/12/04 13:00</div>
+										<div class="items_txt_price">¥320-680</div>
+										<p class="items_txt_ticket">前往购票：
+												<a class="ticketurl" href="https://detail.damai.cn/item.htm?id=661187359610&clicktitle=2021%E5%B9%BF%E5%B7%9E%E8%8D%89%E8%8E%93%E9%9F%B3%E4%B9%90%E8%8A%82" target="_blank">大麦</a>
+										</p>
+								</div>   
+							</div>
+
+							<div class="items">
+								<div class="items_image">
+										<img src="{{ url_for('static', filename='assets/img/festivals/festival6.png')}}">
+								</div>
+								<div class="items_txt">
+										<div class="items_txt_name">
+												<span>【广州】</span>
+												<a href="#" target="_blank">2021广州草莓音乐节(12月5日)</a>
+												</div> 
+										<div class="items_txt_artists">艺人：万能青年旅店/陈粒/木马/马頔/九连真人/文雀/李大奔/夏日入侵企画/闷饼</div>
+										<div class="items_txt_location">地点：[广州]广州长隆度假区音乐节广场</div>
+										<div class="items_txt_date">时间：2021/12/05 13:00</div>
+										<div class="items_txt_price">¥320-680</div>
+										<p class="items_txt_ticket">前往购票：
+												<a class="ticketurl" href="https://detail.damai.cn/item.htm?id=661187359610&clicktitle=2021%E5%B9%BF%E5%B7%9E%E8%8D%89%E8%8E%93%E9%9F%B3%E4%B9%90%E8%8A%82" target="_blank">大麦</a>
+										</p>
+								</div> 
+							</div>		
+
+							<div class="items">
+								<div class="items_image">
+										<img src="{{ url_for('static', filename='assets/img/festivals/festival7.png')}}">
+								</div>
+								<div class="items_txt">
+										<div class="items_txt_name">
+												<span>【广州】</span>
+												<a href="#" target="_blank">2021广州跳飞船音乐节(12月25日)</a>
+												</div> 
+										<div class="items_txt_artists">艺人：杨千嬅/郭顶/万妮达Vinida/阿肆/张颜齐/姜云升/金玟岐/廖俊涛/刘思鉴/张星特/YAMY郭颖 /养鸡YOUNG-G</div>
+										<div class="items_txt_location">地点：[广州]广州长隆度假区音乐节广场</div>
+										<div class="items_txt_date">时间：2021/12/25 13:00</div>
+										<div class="items_txt_price">¥360-960</div>
+										<p class="items_txt_ticket">前往购票：
+												<a class="ticketurl" href="https://detail.damai.cn/item.htm?spm=a2oeg.search_category.0.0.30e38c199ALgsd&id=661049578775&clicktitle=2021%E5%B9%BF%E5%B7%9E%E8%B7%B3%E9%A3%9E%E8%88%B9%E9%9F%B3%E4%B9%90%E8%8A%82" target="_blank">大麦</a>
+										</p>
+								</div> 
+							</div>
+
+							<div class="items">
+								<div class="items_image">
+										<img src="{{ url_for('static', filename='assets/img/festivals/festival7.png')}}">
+								</div>
+								<div class="items_txt">
+										<div class="items_txt_name">
+												<span>【广州】</span>
+												<a href="#" target="_blank">2021广州跳飞船音乐节(12月26日)</a>
+												</div> 
+										<div class="items_txt_artists">艺人：毛不易/陈鸿宇/满舒克/好妹妹/乃万NINEONE#/KAFE.HU/余佳运/钱正昊/张钰琪/陈婧霏/陆政廷Lil.Jet</div>
+										<div class="items_txt_location">地点：[广州]广州长隆度假区音乐节广场</div>
+										<div class="items_txt_date">时间：2021/12/26 13:00</div>
+										<div class="items_txt_price">¥360-960</div>
+										<p class="items_txt_ticket">前往购票：
+												<a class="ticketurl" href="https://detail.damai.cn/item.htm?spm=a2oeg.search_category.0.0.30e38c199ALgsd&id=661049578775&clicktitle=2021%E5%B9%BF%E5%B7%9E%E8%B7%B3%E9%A3%9E%E8%88%B9%E9%9F%B3%E4%B9%90%E8%8A%82" target="_blank">大麦</a>
+										</p>
+								</div> 
+							</div>
+
+						</div>		
+				</div>
+
+					
+			</div>
+		</div>
+	</div>
+
+	<!-- Footer -->
+
+	<footer class="footer">
+		<div class="footer_container d-flex flex-xl-row flex-column align-items-start justify-content-start">
+			<div class="newsletter_container">
+				<div class="newsletter_title"><h2>欢迎订阅本站推广邮件✉️</h2></div>
+				<form action="#" id="newsletter_form" class="newsletter_form">
+					<input type="email" class="newsletter_input" placeholder="请输入邮箱地址：e.g.dressinginlive@gmail.com" required="required">
+					<button class="newsletter_button">立即订阅</button>
+				</form>
+			</div>
+			<div class="footer_lists d-flex flex-sm-row  flex-column align-items-start justify-content-start ml-xl-auto">
+
+				<!-- Useful Links -->
+				<div class="footer_list">
+					<div class="footer_list_title">本站导航</div>
+					<ul>
+						<li><a href="/">首页</a></li>
+						<li><a href="/festivals">演出信息</a></li>
+						<li><a href="/dressing">穿搭参考</a></li>						
+						<li><a href="/contact">联系我们</a></li>
+						
+					</ul>
+				</div>
+
+				<!-- Mixtape -->
+				<div class="footer_list">
+					<div class="footer_list_title">友情链接</div>
+					<ul>
+						<li><a href="https://www.damai.cn/">大麦网</a></li>
+						<li><a href="https://www.showstart.com/">秀动网</a></li>
+						<li><a href="https://music.163.com/">网易云音乐</a></li>	
+					</ul>
+				</div>
+
+				<!-- Connect -->
+				<div class="footer_list">
+					<div class="footer_list_title">联系合作</div>
+					<ul>
+						<li><a href="#">微博</a></li>
+						<li><a href="#">微信公众号</a></li>
+						<li><a href="#">小红书</a></li>
+						<li><a href="#">豆瓣</a></li>
+					</ul>
+				</div>
+
+			</div>
+		</div>
+		<div class="copyright_bar">
+			<span><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="fa fa-heart-o" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>| This website is created with <i class="fa fa-heart-o" aria-hidden="true"></i> by SUN Yutong, 2021
+<!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+			</span>
+		</div>
+	</footer>
+</div>
+
+
+<script src="static/js/jquery-3.2.1.min.js"></script>
+<script src="static/styles/bootstrap-4.1.2/popper.js"></script>
+<script src="static/styles/bootstrap-4.1.2/bootstrap.min.js"></script>
+<script src="static/plugins/greensock/TweenMax.min.js"></script>
+<script src="static/plugins/greensock/TimelineMax.min.js"></script>
+<script src="static/plugins/scrollmagic/ScrollMagic.min.js"></script>
+<script src="static/plugins/greensock/animation.gsap.min.js"></script>
+<script src="static/plugins/greensock/ScrollToPlugin.min.js"></script>
+<script src="static/plugins/OwlCarousel2-2.2.1/owl.carousel.js"></script>
+<script src="static/plugins/easing/easing.js"></script>
+<script src="static/plugins/progressbar/progressbar.min.js"></script>
+<script src="static/plugins/parallax-js-master/parallax.min.js"></script>
+<script src="static/plugins/jPlayer/jquery.jplayer.min.js"></script>
+<script src="static/plugins/jPlayer/jplayer.playlist.min.js"></script>
+<script src="static/js/contact.js"></script>
+
+<script type="text/javascript">
+	var map = L.map('map').setView([35.112115, 111.041268], 4);
+	mapLink = '<a href="http://openstreetmap.org">OpenStreetMap</a>';
+	L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+	attribution: '&copy; ' + mapLink + ' Contributors',
+	maxZoom: 18,
+	}).addTo(map);
+
+	layerGroup = L.layerGroup().addTo(map);
+
+	var items = {};
+	var data = [];
+
+	
+	{% for row in entries %}
+			items = {};
+			items["name"] = "{{ row["Name"] }}";
+			items["url"] = "{{ row["Url"] }}";
+			items["img_url"] = "{{ row["Img_url"] }}";
+			items["Lat"] = {{ row["Lat"] }};
+			items["Lng"] = {{ row["Lng"] }};
+			data.push(items);
+	{% endfor %}
+</script>
+<!-- filter box-->
+<script src="{{ url_for('static', filename='js/filterbox.js') }}"></script>
+
+
+
+</body>
+</html>

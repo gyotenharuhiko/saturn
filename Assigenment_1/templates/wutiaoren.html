@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>五条人</title>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="description" content="Mixtape template project">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css" integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
+<link href="static/plugins/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+<link rel="stylesheet" type="text/css" href="static/plugins/OwlCarousel2-2.2.1/owl.carousel.css">
+<link rel="stylesheet" type="text/css" href="static/plugins/OwlCarousel2-2.2.1/owl.theme.default.css">
+<link rel="stylesheet" type="text/css" href="static/plugins/OwlCarousel2-2.2.1/animate.css">
+<link rel="stylesheet" type="text/css" href="static/styles/contact.css">
+<link rel="stylesheet" type="text/css" href="static/styles/contact_responsive.css">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A==" crossorigin="" />
+<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA==" crossorigin=""></script>
+<script src="https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v0.4.0/leaflet.markercluster.js"></script>
+
+
+<style>
+	a{
+		color:#de4f32;
+	}
+	
+	.items{
+			margin:20px auto;
+			border: solid 1px #de4f32;
+			overflow: hidden;
+			width:100%;
+	}
+	.items_image{
+			width:200px;
+			float: left;
+	}
+	.items img{
+			display:block;
+			width:200px;
+			height:200px;
+	}
+	.items_txt{
+			font-size: 18px;
+			width: 938px;
+			float: right;
+			line-height: 50px;
+			padding-left: 25px;
+	}
+	.items_txt_name{
+			font-weight: bolder;
+			font-size: 20px;
+			color:#de4f32;
+	}
+	.items_txt_music_genre, .items_txt_music_kw, .items_txt_dressing_kw{
+			color: white;
+	}
+
+</style>  
+
+<style>
+	dl,
+	dd {
+			margin: 0;
+	}
+
+	#box {
+			width: 100%;
+			background:black;
+			margin: 15px auto;
+			border:1px solid lightgray;
+	}
+
+	#box dl {
+			height: 50px;
+			line-height: 50px;
+			border-bottom: 1px dashed #dadada;
+			margin: 0 12px;
+	}
+
+	#box dt {
+			float: left;
+			color:#de4f32;
+			font-weight: bold;
+			font-size:15px;
+	}
+
+	#box dd {
+			float: left;
+			color: white;
+			margin: 0 20px;
+			font-size: 14px;
+			cursor: pointer;
+	}
+
+	#box dd.active {
+			color: #de4f32;
+			font-weight: bold;
+	}
+
+	#box dl.select {
+			background:black;
+			margin: 0;
+			padding: 0 11px;
+	}
+
+	#box dl.select dd{
+			border: 1px solid #de4f32;
+			height: 25px;
+			line-height: 25px;
+			margin-top: 13px;
+			padding: 0 2px 0 10px;
+			border-radius: 3px;background-color: black;
+	}
+	#box dl.select dd span{
+			width: 20px;
+			height: 20px;
+			display: inline-block;
+			text-align: center;
+			line-height: 20px;
+			background: #de4f32;
+			color: #fff;
+			margin-left: 10px;
+			cursor: pointer;border-radius: 5px;
+	}
+</style>
+<style>
+
+	.row{
+			margin-top:15px;
+	}
+	.col{
+			padding-bottom:15px; 
+	}
+	.card-img-top{
+			height: 464px;
+	}
+	em[redprice]{
+			color: #e72f2f;
+	}
+	p {
+			line-height: 1px;
+			font-size: 15px;
+			margin:25px;
+			color:black;
+	}
+	.btn{
+			border-radius: 30px;
+			padding: 10px 20px;
+			margin-top: 35px;
+	}
+
+	.nav-link{
+			font-weight: bold;
+	}
+
+	.nav-tabs .nav-link.active {
+    color: white;
+    background-color: #de4f32;
+    border-color: #de4f32;
+	}
+</style>
+
+
+
+</head>
+<body>
+
+<div class="super_container">
+	
+	<!-- Header -->
+	<header class="header">
+		<div class="header_content d-flex flex-row align-items-center justify-content-center">
+			<div class="logo"><a href="#">Just Wear It!</a></div>
+			<div class="log_reg">
+				<ul class="d-flex flex-row align-items-start justify-content-start">
+					{% if current_user.is_authenticated %}
+					<li><a href="/profile">我的</a></li>
+					<li><a href="{{url_for('logout')}}">登出</a></li>
+					{% else %}
+					<li><a href="/login">登录</a></li>
+					<li><a href="/register">注册</a></li>
+					{% endif %}
+				</ul>
+			</div>
+			<nav class="main_nav">
+				<ul class="d-flex flex-row align-items-start justify-content-start">
+					<li><a href="/">首页</a></li>
+					<li><a href="/festivals">演出信息</a></li>
+					<li class="active"><a href="/dressing">穿搭参考</a></li>
+					<li><a href="/contact">联系我们</a></li>
+				</ul>
+			</nav>
+			<div class="hamburger ml-auto">
+				<div class="d-flex flex-column align-items-end justify-content-between">
+					<div></div>
+					<div></div>
+					<div></div>
+				</div>
+			</div>
+		</div>
+	</header>
+
+	<!-- Menu -->
+
+	<div class="menu">
+		<div>
+			<div class="menu_overlay"></div>
+			<div class="menu_container d-flex flex-column align-items-start justify-content-center">
+				<div class="menu_log_reg">
+					<ul class="d-flex flex-row align-items-start justify-content-start">
+						{% if current_user.is_authenticated %}
+						<li><a href="/profile">我的</a></li>
+						<li><a href="{{url_for('logout')}}">登出</a></li>
+						{% else %}
+						<li><a href="/login">登录</a></li>
+						<li><a href="/register">注册</a></li>
+						{% endif %}
+					</ul>
+				</div>
+				<nav class="menu_nav">
+					<ul class="d-flex flex-column align-items-start justify-content-start">
+						<li><a href="/">首页</a></li>
+						<li><a href="/festivals">演出信息</a></li>
+						<li><a href="/dressing">穿搭参考</a></li>
+						<li><a href="/contact">联系我们</a></li>						
+					</ul>
+				</nav>
+			</div>
+		</div>
+	</div>
+
+
+	<!-- Home -->
+
+	<div class="home">
+		<div class="home_inner">
+			<!-- Image artist: https://unsplash.com/@yoannboyer -->
+			<div class="parallax_background parallax-window" data-parallax="scroll" data-image-src="static/assets/img/dressing_bg.jpg" data-speed="0.8"></div>
+			<div class="home_container">
+				<div class="home_content text-center">
+					<div class="home_subtitle">Looking for someone who shares my dressing/music tastes.</div>
+					<div class="home_title">凭穿搭找寻同类</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Contact -->
+
+	<div class="contact">
+		<div class="container">
+			<div class="row">
+				<div class="items">
+					<div class="items_image">
+							<img src="{{ url_for('static', filename='assets/img/artists/wutiaoren.JPG') }}">
+					</div>
+					<div class="items_txt">
+							<div class="items_txt_name">
+									<a href="" target="_blank">五条人</a>
+							</div>
+							<div class="items_txt_music_genre">音乐流派：#Folk #Rock</div>
+							<div class="items_txt_music_kw">音乐关键词：#土 #即兴 #诗意 #迷醉</div>
+							<div class="items_txt_dressing_kw">穿搭关键词：#复古 #花衬衫 #皮衣 #墨镜 #人字拖</div>
+					</div>
+			</div>           
+			<ul class="nav nav-tabs" id="myTab" role="tablist">
+					<li class="nav-item" role="presentation">
+							<button class="nav-link active" id="samelook-tab" data-toggle="tab" href="#samelook" role="tab" aria-controls="samelook" aria-selected="true">艺人同款</button>
+					</li>
+					<li class="nav-item" role="presentation">
+							<button class="nav-link" id="dressingrecommend-tab" data-toggle="tab" href="#dressingrecommend" role="tab" aria-controls="dressingrecommend" aria-selected="false">穿搭推荐</button>
+					</li>
+			</ul>
+			
+			<div id="box">
+				<dl>
+					<dt>性别：</dt>
+					<dd>男</dd>
+					<dd>女</dd>
+				</dl>
+				<dl>
+						<dt>上衣：</dt>
+						<dd>T恤</dd>
+						<dd>衬衫</dd>
+						<dd>马甲</dd>
+						<dd>卫衣</dd>
+						<dd>风衣</dd>
+						<dd>夹克</dd>
+						<dd>外套</dd>
+				</dl>
+				<dl>
+						<dt>下衣：</dt>
+						<dd>运动裤</dd>
+						<dd>牛仔裤</dd>
+						<dd>工装裤</dd>
+						<dd>半裙</dd>
+						<dd>连衣裙</dd>
+				</dl>
+				<dl>
+						<dt>配饰：</dt>
+						<dd>眼镜</dd>
+						<dd>帽子</dd>
+						<dd>包包</dd>
+				</dl>
+				<dl class="select" style="border-bottom-width: 0px;">
+						<dt>已选条件：</dt>
+				</dl>
+			</div>
+
+			<div class="tab-content">
+					<div class="tab-pane active" id="samelook" role="tabpanel" aria-labelledby="samelook-tab">
+							<div class="row row-cols-1 row-cols-md-3">
+									<div class="col">
+											<div class="card h-100 text-center">
+													<img src="{{ url_for('static', filename='assets/img/samelook/wutiaoren/sl-wtr-1.jpg') }}" class="card-img-top" alt="...">
+													<div class="card-body">
+															<p class="name">名称：美总是古怪的卫衣</p>
+															<p class="brand">品牌：五条人士多店</p>
+															<p class="price">价格：
+																	<em redprice>¥249</em>
+															</p>
+															<button class="btn btn-dark btn-small" id="sl-wtr-1">查看详情</button>
+													</div>
+											</div>
+									</div>
+									<div class="col">
+											<div class="card h-100 text-center">
+													<img src="{{ url_for('static', filename='assets/img/samelook/wutiaoren/sl-wtr-2.jpg') }}" class="card-img-top" alt="...">
+													<div class="card-body">
+															<p class="name">名称：疯猫T恤</p>
+															<p class="brand">品牌：五条人士多店</p>
+															<p class="price">价格：
+																	<em redprice>¥159</em>
+															</p>
+															<button class="btn btn-dark btn-small" id="sl-wtr-2">查看详情</button>
+													</div>
+											</div>
+									</div>                        
+									<div class="col">
+											<div class="card h-100 text-center">
+													<img src="{{ url_for('static', filename='assets/img/samelook/wutiaoren/sl-wtr-3.jpg') }}" class="card-img-top" alt="...">
+													<div class="card-body">
+															<p class="name">名称：紫色火焰黑色小众T恤</p>
+															<p class="brand">品牌：Le Trio Terre</p>
+															<p class="price">价格：
+																	<em redprice>¥188</em>
+															</p>
+															<button class="btn btn-dark btn-small" id="sl-wtr-3">查看详情</button>
+													</div>
+											</div>
+									</div>
+									<div class="col">
+											<div class="card h-100 text-center">
+													<img src="{{ url_for('static', filename='assets/img/samelook/wutiaoren/sl-wtr-4.jpg') }}" class="card-img-top" alt="...">
+													<div class="card-body">
+															<p class="name">名称：道上靓仔白色卫衣</p>
+															<p class="brand">品牌：五条人士多店</p>
+															<p class="price">价格：
+																	<em redprice>¥249</em>
+															</p>
+															<button class="btn btn-dark btn-small" id="sl-wtr-4">查看详情</button>
+													</div>
+											</div>
+									</div>
+									<div class="col">
+											<div class="card h-100 text-center">
+													<img src="{{ url_for('static', filename='assets/img/samelook/wutiaoren/sl-wtr-5.jpg') }}" class="card-img-top" alt="...">
+													<div class="card-body">
+															<p class="name">名称：暂无</p>
+															<p class="brand">品牌：暂无</p>
+															<p class="price">价格：
+																	<em redprice>暂无</em>
+															</p>
+															<button class="btn btn-dark btn-small" id="sl-wtr-5">查看详情</button>
+															<script>
+																document.querySelector("#sl-wtr-5").addEventListener('click', Nodetail);
+																function Nodetail(){
+																		alert("非常抱歉，本站尚未找到这件同款的信息，请看看别的吧~");
+																}
+														</script>															
+													</div>
+											</div>
+									</div>
+									<div class="col">
+											<div class="card h-100 text-center">
+													<img src="{{ url_for('static', filename='assets/img/samelook/wutiaoren/sl-wtr-6.jpg') }}" class="card-img-top" alt="...">
+													<div class="card-body">
+															<p class="name">名称：暂无</p>
+															<p class="brand">品牌：暂无</p>
+															<p class="price">价格：
+																	<em redprice>暂无</em>
+															</p>
+															<button class="btn btn-dark btn-small" id="sl-wtr-6">查看详情</button>
+															<script>
+																document.querySelector("#sl-wtr-6").addEventListener('click', Nodetail);
+																function Nodetail(){
+																		alert("非常抱歉，本站尚未找到这件同款的信息，请看看别的吧~");
+																}
+														</script>
+													</div>
+											</div>
+									</div>
+							</div>
+					</div>
+					<div class="tab-pane" id="dressingrecommend" role="tabpanel" aria-labelledby="dressingrecommend-tab">
+							<div class="row row-cols-1 row-cols-md-3 g-4">
+									<div class="col">
+											<div class="card h-100 text-center">
+													<img src="{{ url_for('static', filename='assets/img/dressingrecommend/wutiaoren/dr-wtr-1.jpg') }}" class="card-img-top" alt="...">
+													<div class="card-body">
+															<p class="name">名称：道上靓仔拖鞋</p>
+															<p class="brand">品牌：五条人士多店</p>
+															<p class="price">价格：
+																	<em redprice>¥79</em>
+															</p>
+															<button class="btn btn-dark btn-small" id="dr-wtr-1">查看详情</button>    
+													</div>
+											</div>
+									</div>
+									<div class="col">
+											<div class="card h-100 text-center">
+													<img src="{{ url_for('static', filename='assets/img/dressingrecommend/wutiaoren/dr-wtr-2.jpg') }}" class="card-img-top" alt="...">
+													<div class="card-body">
+															<p class="name">名称：缎面牛血红色蓝色偏丝光衬衫</p>
+															<p class="brand">品牌：NOPMOB皮囊商店</p>
+															<p class="price">价格：
+																	<em redprice>¥169</em>
+															</p>
+															<button class="btn btn-dark btn-small" id="dr-wtr-2">查看详情</button>                                                 
+													</div>
+											</div>
+									</div>                        
+									<div class="col">
+											<div class="card h-100 text-center">
+													<img src="{{ url_for('static', filename='assets/img/dressingrecommend/wutiaoren/dr-wtr-3.jpg') }}" class="card-img-top" alt="...">
+													<div class="card-body">	
+															<p class="name">名称：复古戗驳领高级质感西装外套</p>
+															<p class="brand">品牌：Mentmate</p>
+															<p class="price">价格：
+																	<em redprice>¥279</em>
+															</p>
+															<button class="btn btn-dark btn-small" id="dr-wtr-3">查看详情</button>                                
+													</div>
+											</div>
+									</div>
+									<div class="col">
+											<div class="card h-100 text-center">
+													<img src="{{ url_for('static', filename='assets/img/dressingrecommend/wutiaoren/dr-wtr-4.jpg') }}" class="card-img-top" alt="...">
+													<div class="card-body">
+															<p class="name">名称：重磅面料褶皱飘带设计米色衬衫</p>
+															<p class="brand">品牌：weave studio</p>
+															<p class="price">价格：
+																	<em redprice>¥299</em>
+															</p>
+															<button class="btn btn-dark btn-small" id="dr-wtr-4">查看详情</button>
+													</div>
+											</div>
+									</div>
+									<div class="col">
+											<div class="card h-100 text-center">
+													<img src="{{ url_for('static', filename='assets/img/dressingrecommend/wutiaoren/dr-wtr-5.jpg') }}" class="card-img-top" alt="...">
+													<div class="card-body">
+															<p class="name">名称：酱红复古垫肩利落夹克</p>
+															<p class="brand">品牌：weave studio</p>
+															<p class="price">价格：
+																	<em redprice>¥468</em>
+															</p>
+															<button class="btn btn-dark btn-small" id="dr-wtr-5">查看详情</button>
+															<script>
+
+															</script>
+													</div>
+											</div>
+									</div>
+									<div class="col">
+											<div class="card h-100 text-center">
+													<img src="{{ url_for('static', filename='assets/img/dressingrecommend/wutiaoren/dr-wtr-6.jpg') }}" class="card-img-top" alt="...">
+													<div class="card-body">
+															<p class="name">名称：宽松痞帅ins潮流蛇皮纹衬衫</p>
+															<p class="brand">品牌：Voguo Relay</p>
+															<p class="price">价格：
+																	<em redprice>¥138</em>
+															</p>
+															<button class="btn btn-dark btn-small" id="dr-wtr-6">查看详情</button>
+													</div>
+											</div>
+									</div>
+							
+							</div>                               
+					</div>
+			</div>
+
+
+
+				
+			</div>
+		</div>
+	</div>
+
+	<!-- Footer -->
+
+	<footer class="footer">
+		<div class="footer_container d-flex flex-xl-row flex-column align-items-start justify-content-start">
+			<div class="newsletter_container">
+				<div class="newsletter_title"><h2>欢迎订阅本站推广邮件✉️</h2></div>
+				<form action="#" id="newsletter_form" class="newsletter_form">
+					<input type="email" class="newsletter_input" placeholder="请输入邮箱地址：e.g.dressinginlive@gmail.com" required="required">
+					<button class="newsletter_button">立即订阅</button>
+				</form>
+			</div>
+			<div class="footer_lists d-flex flex-sm-row  flex-column align-items-start justify-content-start ml-xl-auto">
+
+				<!-- Useful Links -->
+				<div class="footer_list">
+					<div class="footer_list_title">本站导航</div>
+					<ul>
+						<li><a href="/">首页</a></li>
+						<li><a href="/festivals">演出信息</a></li>
+						<li><a href="/dressing">穿搭参考</a></li>						
+						<li><a href="/contact">联系我们</a></li>
+						
+					</ul>
+				</div>
+
+				<!-- Mixtape -->
+				<div class="footer_list">
+					<div class="footer_list_title">友情链接</div>
+					<ul>
+						<li><a href="https://www.damai.cn/">大麦网</a></li>
+						<li><a href="https://www.showstart.com/">秀动网</a></li>
+						<li><a href="https://music.163.com/">网易云音乐</a></li>	
+					</ul>
+				</div>
+
+				<!-- Connect -->
+				<div class="footer_list">
+					<div class="footer_list_title">联系合作</div>
+					<ul>
+						<li><a href="#">微博</a></li>
+						<li><a href="#">微信公众号</a></li>
+						<li><a href="#">小红书</a></li>
+						<li><a href="#">豆瓣</a></li>
+					</ul>
+				</div>
+
+			</div>
+		</div>
+		<div class="copyright_bar">
+			<span><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="fa fa-heart-o" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>| This website is created with <i class="fa fa-heart-o" aria-hidden="true"></i> by SUN Yutong, 2021
+<!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+			</span>
+		</div>
+	</footer>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-fQybjgWLrvvRgtW6bFlB7jaZrFsaBXjsOMm/tB9LTS58ONXgqbR9W8oWht/amnpF" crossorigin="anonymous"></script>
+<script src="static/plugins/greensock/TweenMax.min.js"></script>
+<script src="static/plugins/greensock/TimelineMax.min.js"></script>
+<script src="static/plugins/scrollmagic/ScrollMagic.min.js"></script>
+<script src="static/plugins/greensock/animation.gsap.min.js"></script>
+<script src="static/plugins/greensock/ScrollToPlugin.min.js"></script>
+<script src="static/plugins/OwlCarousel2-2.2.1/owl.carousel.js"></script>
+<script src="static/plugins/easing/easing.js"></script>
+<script src="static/plugins/progressbar/progressbar.min.js"></script>
+<script src="static/plugins/parallax-js-master/parallax.min.js"></script>
+<script src="static/plugins/jPlayer/jquery.jplayer.min.js"></script>
+<script src="static/plugins/jPlayer/jplayer.playlist.min.js"></script>
+<script src="static/js/contact.js"></script>
+<!-- filter box-->
+<script src="{{ url_for('static', filename='js/filterbox.js') }}"></script>
+<!-- Bootstrap Tab-->
+<script>
+	$(function () {
+			$('#myTab li:last-child a').tab('show')
+	})
+</script>
+
+<!-- Checkdetail-->
+<script src="{{ url_for('static', filename='js/wutiaoren.js') }}"></script> 
+
+</body>
+</html>

@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>Music Festivals/2</title>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="description" content="Mixtape template project">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="static/styles/bootstrap-4.1.2/bootstrap.min.css">
+<link href="static/plugins/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+<link rel="stylesheet" type="text/css" href="static/plugins/OwlCarousel2-2.2.1/owl.carousel.css">
+<link rel="stylesheet" type="text/css" href="static/plugins/OwlCarousel2-2.2.1/owl.theme.default.css">
+<link rel="stylesheet" type="text/css" href="static/plugins/OwlCarousel2-2.2.1/animate.css">
+<link rel="stylesheet" type="text/css" href="static/styles/contact.css">
+<link rel="stylesheet" type="text/css" href="static/styles/contact_responsive.css">
+
+<!-- button-->
+<link rel="stylesheet" href="{{url_for('static', filename='css/iwant.css')}}">
+
+<style>
+
+	a{
+		color:#de4f32;
+	}
+	p a {
+		text-decoration:none;
+	}
+	.items{
+			margin:20px auto;
+			border: solid 1px white;
+			overflow: hidden;
+			width:100%;
+	}
+
+	.items_image{
+			width:200px;
+			float: left;
+	}
+	.items img{
+			display:block;
+			width:200px;
+			height:267px;
+			padding:15px
+	}
+	.items_txt{
+			font-size: 14px;
+			width: 100%;
+			line-height: 30px;
+			color:white;
+			margin-top: 15px;
+			padding-right: 10px;
+	}
+	.items_txt_name{
+			font-weight: bolder;
+			font-size: 20px;
+			color:white ;
+	}
+
+	.items_txt_price{
+	color:#e72f2f;
+	}
+	
+</style>
+
+<style>
+	.tab-content{
+			border:1px solid #de4f32;
+			padding:15px;
+			display: flex;
+			flex-direction: column;
+			align-items: stretch;
+			justify-content: space-evenly;
+			align-content: stretch;
+			width: 100%;
+	}
+
+	.nav-tabs .nav-link.active {
+    color: white;
+    background-color: #de4f32;
+    border-color: #de4f32;
+	}
+	.nav-tabs {
+    border-bottom: none;
+	}
+
+	.title{
+			font-size: 18px;
+			padding: 15px;
+	}
+
+	.text{
+			font-size:15px;
+			padding-left: 30px;
+
+	}
+</style>
+<style>
+	.cells{
+			border: none;
+			overflow: hidden;
+	}
+	.cells_image{
+			float: left;
+	}
+	.cells img{
+			display:block;
+			width:250px;
+			height:250px;
+			border-radius: 50%;
+			padding:35px;
+	}
+	.cells_txt{
+			font-size: 14px;
+			width: 100%;
+			height:250px;
+			line-height: 25px;
+			text-align: center;
+			display: table-cell;
+			vertical-align: middle;
+	}
+
+	.cells_txt_name{
+			font-weight: bolder;
+			font-size: 20px;
+	}
+	
+	.cells_music{
+			font-size:16px;
+			height:250px;
+			background-color: #333232;
+	}
+	.cells_music_text{
+			width:50%;
+			float:left;
+			height:250px;
+			padding:25px;
+			display:table-cell;
+			vertical-align:middle;
+			line-height: 33px;
+	}
+
+	.cells_music_genre, .cells_music_kw, .cells_dressing_kw, .cells_hitsongs, .title{
+			font-size:18px;
+			color:#de4f32 ;
+	}
+
+	.cells_music_songs{
+			width:50%;
+			float:right;
+			height:250px;
+			padding:25px;
+			line-height: 33px;
+	}
+</style>
+
+</head>
+<body>
+
+<div class="super_container">
+	
+	<!-- Header -->
+	<header class="header">
+		<div class="header_content d-flex flex-row align-items-center justify-content-center">
+			<div class="logo"><a href="#">Just Wear It!</a></div>
+			<div class="log_reg">
+				<ul class="d-flex flex-row align-items-start justify-content-start">
+					{% if current_user.is_authenticated %}
+					<li><a href="/profile">我的</a></li>
+					<li><a href="{{url_for('logout')}}">登出</a></li>
+					{% else %}
+					<li><a href="/login">登录</a></li>
+					<li><a href="/register">注册</a></li>
+					{% endif %}
+				</ul>
+			</div>
+			<nav class="main_nav">
+				<ul class="d-flex flex-row align-items-start justify-content-start">
+					<li><a href="/">首页</a></li>
+					<li class="active"><a href="/festivals">演出信息</a></li>
+					<li><a href="/dressing">穿搭参考</a></li>
+					<li><a href="/contact">联系我们</a></li>
+				</ul>
+			</nav>
+			<div class="hamburger ml-auto">
+				<div class="d-flex flex-column align-items-end justify-content-between">
+					<div></div>
+					<div></div>
+					<div></div>
+				</div>
+			</div>
+		</div>
+	</header>
+
+	<!-- Menu -->
+
+	<div class="menu">
+		<div>
+			<div class="menu_overlay"></div>
+			<div class="menu_container d-flex flex-column align-items-start justify-content-center">
+				<div class="menu_log_reg">
+					<ul class="d-flex flex-row align-items-start justify-content-start">
+						{% if current_user.is_authenticated %}
+						<li><a href="/profile">我的</a></li>
+						<li><a href="{{url_for('logout')}}">登出</a></li>
+						{% else %}
+						<li><a href="/login">登录</a></li>
+						<li><a href="/register">注册</a></li>
+						{% endif %}
+					</ul>
+				</div>
+				<nav class="menu_nav">
+					<ul class="d-flex flex-column align-items-start justify-content-start">
+						<li><a href="/">首页</a></li>
+						<li><a href="/festivals">演出信息</a></li>
+						<li><a href="/dressing">穿搭参考</a></li>
+						<li><a href="/contact">联系我们</a></li>						
+					</ul>
+				</nav>
+			</div>
+		</div>
+	</div>
+
+
+	<!-- Home -->
+
+	<div class="home">
+		<div class="home_inner">
+			<!-- Image artist: https://unsplash.com/@yoannboyer -->
+			<div class="parallax_background parallax-window" data-parallax="scroll" data-image-src="static/assets/img/festival_bg.jpg" data-speed="0.8"></div>
+			<div class="home_container">
+				<div class="home_content text-center">
+					<div class="home_subtitle">Upcoming Festivals</div>
+					<div class="home_title">开启音乐节现场</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Contact -->
+
+	<div class="contact">
+		<div class="container">
+			<div class="row">
+				<div class="items">
+					<div class="items_image">
+							<img src="{{ url_for('static', filename='assets/img/festivals/festival1.png')}}">
+					</div>
+					<div class="items_txt">
+							<div class="items_txt_name">
+									<span>【舟山】</span>
+									<a href="#" target="_blank">2021舟山东海音乐节（11月28日）</a>
+							</div> 
+							<div class="items_txt_artists">艺人：万能青年旅店/五条人/Casino Demon赌鬼乐队/板砖乐队/马赛克乐队/达闻西乐队/梅卡德尔乐队/布鹅岛/远东之狮/灰汁团/续弦/CSBQ乐队/古龙十代/亚细亚报童</div>
+							<div class="items_txt_location">地点：[舟山]舟山群岛新区 • 朱家尖南沙</div>
+							<div class="items_txt_date">时间：2021/11/28 14:00</div>
+							<div class="items_txt_price">¥280-399</div>
+							<p class="items_txt_ticket">前往购票：
+									<a class="ticketurl" href="https://detail.damai.cn/item.htm?id=658257440543&clicktitle=2021%E8%88%9F%E5%B1%B1%E4%B8%9C%E6%B5%B7%E9%9F%B3%E4%B9%90%E8%8A%82" target="_blank">大麦</a>
+									<a class="ticketurl" href="https://www.showstart.com/event/166270" target="_blank">秀动</a>
+							</p>
+					</div>   
+				</div>
+
+				<ul class="nav nav-tabs" id="myTab" role="tablist">
+						<li class="nav-item" role="presentation">
+							<button class="nav-link active" id="guide-tab" data-toggle="tab" href="#guide" role="tab" aria-controls="guide" aria-selected="true">参演艺人</button>
+						</li>
+						<li class="nav-item" role="presentation">
+							<button class="nav-link" id="artists-tab" data-toggle="tab" href="#artists" role="tab" aria-controls="artists" aria-selected="false">穿搭指南</button>
+						</li>
+				</ul>
+				
+				<div class="tab-content">					
+						<div class="tab-pane active" id="guide" role="tabpanel" aria-labelledby="guide-tab">
+								<div class="cells">
+									<div class="cells_image">
+											<img src="{{ url_for('static', filename='assets/img/artists/wutiaoren.JPG') }}">
+									</div>
+									<div class="cells_txt">
+											<div class="cells_txt_name">
+													<a href="" target="_blank">五条人</a>
+											</div>
+											<div class="cells_txt_intro">五条人乐队，中国民谣乐队，来自广东省海丰县。2009年，发表首张专辑《县城记》。获得华语传媒音乐大奖 "最佳民谣艺人"、南方周末"2009年度原创文化榜"唯一"年度音乐"等7个奖项。2020年7月，参加爱奇艺原创音乐综艺《乐队的夏天第二季》。</div>
+											<a id="towutiaoren" href="/wutiaoren" target="_blank"><button class="custom-btn btn-11">我想穿成Ta<div class="dot"></div></button></a>
+											<script>
+													document.querySelector("#towutiaoren").addEventListener('click', function(e){
+															e.preventDefault();
+															window.location.href="/wutiaoren";
+															console.log("click!");
+													},false);
+											</script>
+									</div>
+									<div class="cells_music">
+											<div class="cells_music_text">
+													<div class="cells_music_genre">🎵音乐流派</div>
+													<div class="cells_mg_content">#Folk #Rock</div>
+													<div class="cells_music_kw">🎤音乐关键词</div>
+													<div clas="cells_mkw_content">#土 #即兴 #诗意 #迷醉</div>
+													<div class="cells_dressing_kw">👔穿搭关键词</div>
+													<div class="cells_dkw_content">#复古 #花衬衫 #皮衣 #墨镜 #人字拖</div>
+											</div>
+											<div class="cells_music_songs">
+												<div class="cells_hitsongs">🔥热门歌曲</div>
+												<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=298 height=52 src="//music.163.com/outchain/player?type=2&id=447926025&auto=0&height=32"></iframe>
+												<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=298 height=52 src="//music.163.com/outchain/player?type=2&id=28587850&auto=0&height=32"></iframe>
+												<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=298 height=52 src="//music.163.com/outchain/player?type=2&id=28587844&auto=0&height=32"></iframe>													
+											</div>
+										</div>
+								</div>    										
+						
+								<div class="cells">
+										<div class="cells_image">
+												<img src="{{ url_for('static', filename='assets/img/artists/masaike.JPG') }}">
+										</div>
+										<div class="cells_txt">
+												<div class="cells_txt_name">
+														<a href="" target="_blank">马赛克</a>
+												</div>
+												<div class="cells_txt_intro">马赛克乐队，成立于2008年的中国内地独立乐队。这支乐队具有典型80后怀旧的独立乐队，他们拥有不可抑制的创作激情和癫狂摇摆的演出现场。乐队口号为：“我们写的歌不是苦大仇深而是自然状态下产生的。2020年7月，参加爱奇艺原创音乐综艺节目《乐队的夏天第二季》。</div>
+												<a id="tomasaike" href="/masaike" target="_blank"><button class="custom-btn btn-11">我想穿成Ta<div class="dot"></div></button></a>
+												<script>
+														document.querySelector("#tomasaike").addEventListener('click', function(e){
+																e.preventDefault();
+																window.location.href="/masaike";
+																console.log("click!");
+														},false);
+												</script>
+										</div>
+										<div class="cells_music">
+												<div class="cells_music_text">
+														<div class="cells_music_genre">🎵音乐流派</div>
+														<div class="cells_mg_content">#Disco #Dance Punk</div>
+														<div class="cells_music_kw">🎤音乐关键词</div>
+														<div clas="cells_mkw_content">#怀旧 #快乐 #动感</div>
+														<div class="cells_dressing_kw">👔穿搭关键词</div>
+														<div class="cells_dkw_content">#复古 #迪厅 #亮色 #棒球帽 #报童帽</div>
+												</div>
+												<div class="cells_music_songs">
+														<div class="cells_hitsongs">🔥热门歌曲</div>
+														<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=298 height=52 src="//music.163.com/outchain/player?type=2&id=1324880066&auto=0&height=32"></iframe>
+														<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=298 height=52 src="//music.163.com/outchain/player?type=2&id=454069877&auto=0&height=32"></iframe>	
+														<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=298 height=52 src="//music.163.com/outchain/player?type=2&id=449577712&auto=0&height=32"></iframe>																						
+												</div>
+										</div>
+								</div>    
+							</div>
+
+							<div class="tab-pane" id="artists" role="tabpanel" aria-labelledby="artists-tab">
+								<div class="cells">
+									<div class="weather">
+											<div class="title">☁️当地天气详情</div>
+											<div class="text">
+													<div class="forecast">
+															<ul>5日天气预报：</ul>
+															<iframe allowtransparency="true" frameborder="0" width="575" height="100" scrolling="no" src="//tianqi.2345.com/plugin/widget/index.htm?s=2&z=1&t=0&v=0&d=5&bd=0&k=&f=ffffff&ltf=009944&htf=cc0000&q=0&e=0&a=0&c=58477&w=800&h=100&align=center"></iframe>																										
+													</div>
+													<div class="climate">
+															<ul>当地气候特征：四季分明、季风明显、冬暖夏凉；全年多大风，春季多海雾、夏秋多台风等</ul>
+													</div>
+													<div class="temperature">
+															<ul>当日历史温度均值：8-16℃</ul>
+													</div>
+											</div>
+									</div>
+									<div class="dressingindex">
+											<div class="title">👗预测穿衣指数</div>
+											<div class="text">
+													<ul>凉爽（风衣、大衣、夹大衣、外套、毛衣、毛外套、西装、防寒服）</ul>
+											</div>
+									<div class="dressingtips">
+											<div class="title">🕶穿搭TIPS</div>
+											<div class="text">
+													<ul>本音乐节音乐风格以#独立摇滚 #另类摇滚 #硬核朋克为主,现场可能会有POGO、开火车等激烈行为，如果你也想参与的话，建议穿运动鞋以免受伤。</ul>
+													<ul>当地海风较大，建议穿可以防风的外套出行哦~</ul>
+											</div>
+									</div>
+								</div>	
+							</div>  
+
+					</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Footer -->
+
+	<footer class="footer">
+		<div class="footer_container d-flex flex-xl-row flex-column align-items-start justify-content-start">
+			<div class="newsletter_container">
+				<div class="newsletter_title"><h2>欢迎订阅本站推广邮件✉️</h2></div>
+				<form action="#" id="newsletter_form" class="newsletter_form">
+					<input type="email" class="newsletter_input" placeholder="请输入邮箱地址：e.g.dressinginlive@gmail.com" required="required">
+					<button class="newsletter_button">立即订阅</button>
+				</form>
+			</div>
+			<div class="footer_lists d-flex flex-sm-row  flex-column align-items-start justify-content-start ml-xl-auto">
+
+				<!-- Useful Links -->
+				<div class="footer_list">
+					<div class="footer_list_title">本站导航</div>
+					<ul>
+						<li><a href="/">首页</a></li>
+						<li><a href="/festivals">演出信息</a></li>
+						<li><a href="/dressing">穿搭参考</a></li>						
+						<li><a href="/contact">联系我们</a></li>
+						
+					</ul>
+				</div>
+
+				<!-- Mixtape -->
+				<div class="footer_list">
+					<div class="footer_list_title">友情链接</div>
+					<ul>
+						<li><a href="https://www.damai.cn/">大麦网</a></li>
+						<li><a href="https://www.showstart.com/">秀动网</a></li>
+						<li><a href="https://music.163.com/">网易云音乐</a></li>	
+					</ul>
+				</div>
+
+				<!-- Connect -->
+				<div class="footer_list">
+					<div class="footer_list_title">联系合作</div>
+					<ul>
+						<li><a href="#">微博</a></li>
+						<li><a href="#">微信公众号</a></li>
+						<li><a href="#">小红书</a></li>
+						<li><a href="#">豆瓣</a></li>
+					</ul>
+				</div>
+
+			</div>
+		</div>
+		<div class="copyright_bar">
+			<span><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="fa fa-heart-o" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>| This website is created with <i class="fa fa-heart-o" aria-hidden="true"></i> by SUN Yutong, 2021<!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+			</span>
+		</div>
+	</footer>
+</div>
+
+<script src="static/js/jquery-3.2.1.min.js"></script>
+<script src="static/styles/bootstrap-4.1.2/popper.js"></script>
+<script src="static/styles/bootstrap-4.1.2/bootstrap.min.js"></script>
+<script src="static/plugins/greensock/TweenMax.min.js"></script>
+<script src="static/plugins/greensock/TimelineMax.min.js"></script>
+<script src="static/plugins/scrollmagic/ScrollMagic.min.js"></script>
+<script src="static/plugins/greensock/animation.gsap.min.js"></script>
+<script src="static/plugins/greensock/ScrollToPlugin.min.js"></script>
+<script src="static/plugins/OwlCarousel2-2.2.1/owl.carousel.js"></script>
+<script src="static/plugins/easing/easing.js"></script>
+<script src="static/plugins/progressbar/progressbar.min.js"></script>
+<script src="static/plugins/parallax-js-master/parallax.min.js"></script>
+<script src="static/plugins/jPlayer/jquery.jplayer.min.js"></script>
+<script src="static/plugins/jPlayer/jplayer.playlist.min.js"></script>
+<script src="static/js/contact.js"></script>
+
+<script>
+	$(function () {
+		$('#myTab li:last-child a').tab('show')
+	})
+</script>
+
+</body>
+</html>
